@@ -1,0 +1,8 @@
+SECRET_KEY=django-insecure-*7%z8o*icmzv^3y@x@t*lwngw_mo#k2et^fpe*_fmi=qf9@%ey
+DEBUG=True
+
+NAME=django_3
+USER=omt
+PASSWORD=12345
+HOST=127.0.0.1
+PORT=5432
