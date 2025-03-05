@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from lms.models import Course, Lesson
 
@@ -13,3 +13,13 @@ class LessonSerializer(ModelSerializer):
     class Meta:
         model = Lesson
         fields = "__all__"
+
+class LessonDetailSerializer(ModelSerializer):
+    count_lesson = SerializerMethodField()
+
+    def get_count_lesson(self, obj):
+        return Lesson.objects.filter(course=obj.course)
+
+    class Meta:
+        model = Lesson
+        fields = ("name", "description", "preview", "video", "course")
