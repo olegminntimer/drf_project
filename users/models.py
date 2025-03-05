@@ -59,7 +59,7 @@ class Payment(models.Model):
         help_text="Укажите пользователя",
         related_name="payments"
     )
-    payment = models.DateField(
+    date = models.DateField(
         auto_now=True,
         blank=True,
         null=True,
@@ -98,3 +98,7 @@ class Payment(models.Model):
         verbose_name="Способ оплаты",
         help_text="Введите способ оплаты",
     )
+
+    class Meta:
+        verbose_name = "Оплата"
+        verbose_name_plural = "Оплата"
