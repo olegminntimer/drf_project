@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from lms.models import Lesson
+
+
+@admin.register(Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'preview', 'video', 'course')

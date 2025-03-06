@@ -60,7 +60,7 @@ class Payment(models.Model):
         related_name="payments"
     )
     date = models.DateField(
-        auto_now=True,
+        # auto_now=True,
         blank=True,
         null=True,
         verbose_name="Дата оплаты",

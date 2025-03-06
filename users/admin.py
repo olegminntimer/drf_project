@@ -9,7 +9,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('email', 'phone', 'city', 'avatar')
 
 @admin.register(Payment)
-class UserAdmin(admin.ModelAdmin):
+class PaymentAdmin(admin.ModelAdmin):
     list_display = ('user', 'date', 'course_paid', 'lesson_paid', 'amount', 'payment_method')
 
 @admin.register(Course)
