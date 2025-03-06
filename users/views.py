@@ -11,4 +11,4 @@ class PaymentViewSet(ModelViewSet):
     serializer_class = PaymentSerializer
     filter_backends = [filters.OrderingFilter]
     filterset_fields = ['course_paid', 'lesson_paid', 'payment_method']
-    ordering_fields = ['data',]
+    ordering_fields = ('data',)
