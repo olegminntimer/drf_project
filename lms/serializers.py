@@ -30,4 +30,4 @@ class LessonDetailSerializer(ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ("name", "description", "preview", "video", "course")
+        fields = "__all__"
