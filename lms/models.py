@@ -1,6 +1,7 @@
 from django.db import models
 
 from config import settings
+from users.models import User
 
 
 class Course(models.Model):
@@ -65,3 +66,27 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
+
+class Subscription(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        verbose_name="Пользователь",
+        help_text="Укажите пользователя",
+        related_name="payments"
+    )
+    course = models.ForeignKey(
+        Course,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        verbose_name="Название курса",
+        help_text="Укажите курс",
+    )
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "ПОдписки"
