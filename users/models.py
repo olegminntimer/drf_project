@@ -123,3 +123,9 @@ class Subscription(models.Model):
         help_text="Введите курс",
         related_name="courses_subs"
     )
+    # subscription_status = models.BooleanField(
+    #     blank=True,
+    #     null=True,
+    #     verbose_name="Подписка",
+    #     help_text="Введите статус подписки",
+    # )
