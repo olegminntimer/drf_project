@@ -102,3 +102,30 @@ class Payment(models.Model):
     class Meta:
         verbose_name = "Оплата"
         verbose_name_plural = "Оплата"
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Пользователь",
+        help_text="Укажите пользователя",
+        related_name="users_subs"
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Курс",
+        help_text="Введите курс",
+        related_name="courses_subs"
+    )
+    # subscription_status = models.BooleanField(
+    #     blank=True,
+    #     null=True,
+    #     verbose_name="Подписка",
+    #     help_text="Введите статус подписки",
+    # )
