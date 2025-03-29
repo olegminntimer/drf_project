@@ -98,20 +98,6 @@ class Payment(models.Model):
         verbose_name="Способ оплаты",
         help_text="Введите способ оплаты",
     )
-    session_id = models.CharField(
-        max_length=225,
-        blank=True,
-        null=True,
-        verbose_name="ID сессии",
-        help_text="Укажите ID сессии",
-    )
-    link = models.URLField(
-        max_length=400,
-        blank=True,
-        null=True,
-        verbose_name="Ссылка на оплату",
-        help_text="Укажите ссылку на оплату",
-    )
 
     class Meta:
         verbose_name = "Оплата"
@@ -140,9 +126,40 @@ class Subscription(models.Model):
         help_text="Введите курс",
         related_name="courses_subs",
     )
-    # subscription_status = models.BooleanField(
-    #     blank=True,
-    #     null=True,
-    #     verbose_name="Подписка",
-    #     help_text="Введите статус подписки",
-    # )
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
+
+
+class Remuneration(models.Model):
+    session_id = models.CharField(
+        max_length=225,
+        blank=True,
+        null=True,
+        verbose_name="ID сессии",
+        help_text="Укажите ID сессии",
+    )
+    link = models.URLField(
+        max_length=400,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на оплату",
+        help_text="Укажите ссылку на оплату",
+    )
+    user = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        verbose_name="Пользователь",
+        help_text="Укажите пользователя",
+        related_name="remunerations",
+    )
+
+    class Meta:
+        verbose_name = "WEB-оплата"
+        verbose_name_plural = "WEB-оплата"
+
+    def __str__(self):
+        return self.amount
