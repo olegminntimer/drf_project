@@ -133,6 +133,12 @@ class Subscription(models.Model):
 
 
 class Remuneration(models.Model):
+    amount = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Сумма оплаты",
+        help_text="Введите сумму оплаты",
+    )
     session_id = models.CharField(
         max_length=225,
         blank=True,

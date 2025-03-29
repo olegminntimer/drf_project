@@ -7,8 +7,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import CreateAPIView, get_object_or_404
 
 from lms.models import Course
-from users.models import Payment, User, Subscription
-from users.serializers import PaymentSerializer, UserSerializer, SubscriptionSerializer
+from users.models import Payment, User, Subscription, Remuneration
+from users.serializers import PaymentSerializer, UserSerializer, SubscriptionSerializer, RemunerationSerializer
+from users.services import convert_rub_to_usd, create_stripe_price, create_stripe_session
 
 
 class PaymentViewSet(ModelViewSet):
@@ -50,3 +51,17 @@ class SubscriptionAPIView(APIView):
             subs_item = Subscription.objects.create(user=user, course=course_item)
             message = "Вы подписались на обновления курса"
         return Response({"message": message})
+
+
+class RemunerationCreateAPIView(CreateAPIView):
+    serializer_class = RemunerationSerializer
+    queryset = Remuneration.objects.all()
+
+    def perform_create(self, serializer):
+        remuneration = serializer.save(user=self.request.user)
+        # amount_in_dollars = convert_rub_to_usd(remuneration.amount)
+        price = create_stripe_price(remuneration.amount)
+        session_id, remuneration_link = create_stripe_session(price)
+        remuneration.session_id = session_id
+        remuneration.link = remuneration_link
+        remuneration.save()
