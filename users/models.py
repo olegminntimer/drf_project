@@ -57,7 +57,7 @@ class Payment(models.Model):
         on_delete=models.SET_NULL,
         verbose_name="Пользователь",
         help_text="Укажите пользователя",
-        related_name="payments"
+        related_name="payments",
     )
     date = models.DateField(
         # auto_now=True,
@@ -73,7 +73,7 @@ class Payment(models.Model):
         null=True,
         verbose_name="Курс",
         help_text="Введите курс",
-        related_name="courses"
+        related_name="courses",
     )
     lesson_paid = models.ForeignKey(
         Lesson,
@@ -82,7 +82,7 @@ class Payment(models.Model):
         null=True,
         verbose_name="Урок",
         help_text="Введите урок",
-        related_name="lessons"
+        related_name="lessons",
     )
     amount = models.IntegerField(
         blank=True,
@@ -112,7 +112,7 @@ class Subscription(models.Model):
         null=True,
         verbose_name="Пользователь",
         help_text="Укажите пользователя",
-        related_name="users_subs"
+        related_name="users_subs",
     )
     course = models.ForeignKey(
         Course,
@@ -121,7 +121,7 @@ class Subscription(models.Model):
         null=True,
         verbose_name="Курс",
         help_text="Введите курс",
-        related_name="courses_subs"
+        related_name="courses_subs",
     )
     # subscription_status = models.BooleanField(
     #     blank=True,

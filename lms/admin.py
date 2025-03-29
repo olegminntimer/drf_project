@@ -5,4 +5,4 @@ from lms.models import Lesson
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'preview', 'video', 'course')
+    list_display = ("name", "description", "preview", "video", "course")
