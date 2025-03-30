@@ -10,9 +10,7 @@ stripe.api_key = STRIPE_API_KEY
 def convert_rub_to_usd(amount):
     """Конвертирует рубли в доллары."""
 
-    c = CurrencyRates()
-    rate = c.get_rate('RUB', 'USD')
-    return int(amount * rate)
+    return int(amount / 83)
 
 
 def create_stripe_price(amount):
@@ -20,7 +18,7 @@ def create_stripe_price(amount):
 
     return stripe.Price.create(
         currency="usd",
-        unit_amount=amount*100,
+        unit_amount=amount * 100,
         product_data={"name": "Remuneration"},
     )
 

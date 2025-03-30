@@ -59,8 +59,8 @@ class RemunerationCreateAPIView(CreateAPIView):
 
     def perform_create(self, serializer):
         remuneration = serializer.save(user=self.request.user)
-        # amount_in_dollars = convert_rub_to_usd(remuneration.amount)
-        price = create_stripe_price(remuneration.amount)
+        amount_in_dollars = convert_rub_to_usd(remuneration.amount)
+        price = create_stripe_price(amount_in_dollars)
         session_id, remuneration_link = create_stripe_session(price)
         remuneration.session_id = session_id
         remuneration.link = remuneration_link
