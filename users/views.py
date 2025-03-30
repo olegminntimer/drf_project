@@ -9,7 +9,7 @@ from rest_framework.generics import CreateAPIView, get_object_or_404
 from lms.models import Course
 from users.models import Payment, User, Subscription, Remuneration
 from users.serializers import PaymentSerializer, UserSerializer, SubscriptionSerializer, RemunerationSerializer
-from users.services import convert_rub_to_usd, create_stripe_price, create_stripe_session
+from users.services import convert_rub_to_usd, create_stripe_price, create_stripe_session, create_stripe_product
 
 
 class PaymentViewSet(ModelViewSet):
@@ -60,7 +60,8 @@ class RemunerationCreateAPIView(CreateAPIView):
     def perform_create(self, serializer):
         remuneration = serializer.save(user=self.request.user)
         amount_in_dollars = convert_rub_to_usd(remuneration.amount)
-        price = create_stripe_price(amount_in_dollars)
+        product = create_stripe_product(product_name="Course")
+        price = create_stripe_price(product['name'], amount_in_dollars)
         session_id, remuneration_link = create_stripe_session(price)
         remuneration.session_id = session_id
         remuneration.link = remuneration_link

@@ -7,19 +7,26 @@ from forex_python.converter import CurrencyRates
 stripe.api_key = STRIPE_API_KEY
 
 
-def convert_rub_to_usd(amount):
+def convert_rub_to_usd(rub_price):
     """Конвертирует рубли в доллары."""
 
-    return int(amount / 83)
+    usd_price = rub_price * 83
+    return usd_price
 
 
-def create_stripe_price(amount):
+def create_stripe_product(product_name):
+    """Создаем stripe продукт"""
+    stripe_product = stripe.Product.create(name=product_name)
+    return stripe_product
+
+
+def create_stripe_price(product_name, amount):
     """Создает цену в docs.stripe.com."""
 
     return stripe.Price.create(
         currency="usd",
         unit_amount=amount * 100,
-        product_data={"name": "Remuneration"},
+        product_data={"name": product_name},
     )
 
 
