@@ -6,7 +6,7 @@ from users.models import User, Payment, Subscription
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("email", "phone", "city", "avatar")
+    list_display = ("id", "email", "phone", "city", "avatar")
 
 
 @admin.register(Payment)
@@ -21,9 +21,9 @@ class PaymentAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Course)
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ("name", "description", "preview")
+# @admin.register(Course)
+# class CourseAdmin(admin.ModelAdmin):
+#     list_display = ("name", "description", "preview")
 
 
 @admin.register(Subscription)
