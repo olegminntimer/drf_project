@@ -7,6 +7,7 @@ from lms.models import Lesson, Course
 class LessonAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "description", "preview", "video", "course")
 
+
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "description", "preview", "owner")

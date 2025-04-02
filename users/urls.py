@@ -3,7 +3,12 @@ from rest_framework.permissions import AllowAny
 from rest_framework.routers import DefaultRouter
 
 from users.apps import UsersConfig
-from users.views import PaymentViewSet, UserCreateAPIView, SubscriptionAPIView, RemunerationCreateAPIView
+from users.views import (
+    PaymentViewSet,
+    UserCreateAPIView,
+    SubscriptionAPIView,
+    RemunerationCreateAPIView,
+)
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,

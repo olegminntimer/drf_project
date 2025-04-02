@@ -1,10 +1,13 @@
+import pytz
+
 from celery import shared_task
-from django.conf.global_settings import EMAIL_HOST_USER
+from config.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 from rest_framework.generics import get_object_or_404
+from datetime import timedelta, datetime
 
 from lms.models import Course
-from users.models import Subscription
+from users.models import Subscription, User
 
 
 @shared_task
@@ -18,7 +21,19 @@ def subscription_update(pk):
                 subject="Обновления курса.",
                 message=f'Курс "{course.name}" обновился!',
                 from_email=EMAIL_HOST_USER,
-                recipient_list=[sub_user,],
+                recipient_list=[
+                    sub_user,
+                ],
             )
         except Exception as e:
             print(str(e))
+
+
+@shared_task
+def check_last_login():
+    users = User.objects.all()
+    for user in users:
+        time_difference = datetime.now().replace(tzinfo=pytz.utc) - user.last_login
+        if time_difference > timedelta(days=30):
+            user.is_active = False
+            user.save()

@@ -27,8 +27,7 @@ class CourseViewSet(ModelViewSet):
 
     def perform_update(self, serializer):
         instance = serializer.save()
-        subscription_update(instance.pk)
-        print("in update")
+        subscription_update.delay(instance.pk)
         instance.save()
 
     def get_permissions(self):
