@@ -1,5 +1,6 @@
 from django.db import models
 
+
 from config import settings
 
 
@@ -65,6 +66,7 @@ class Lesson(models.Model):
         on_delete=models.SET_NULL,
         verbose_name="Название курса",
         help_text="Укажите курс",
+        related_name="course_lessons",
     )
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
