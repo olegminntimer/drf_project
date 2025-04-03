@@ -6,21 +6,21 @@ from users.models import User, Payment
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
-        if not Course.objects.filter(name='Python').exists():
+        if not Course.objects.filter(name="Python").exists():
             course = Course(
                 name="Python",
                 description="Python developer",
             )
             course.save()
 
-        if not Course.objects.filter(name='Python dev').exists():
+        if not Course.objects.filter(name="Python dev").exists():
             course = Course(
                 name="Python dev",
                 description="Python development",
             )
             course.save()
 
-        if not Course.objects.filter(name='Java dev').exists():
+        if not Course.objects.filter(name="Java dev").exists():
             course = Course(
                 name="Java dev",
                 description="Java development",

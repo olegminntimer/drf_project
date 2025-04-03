@@ -84,7 +84,7 @@ class Payment(models.Model):
         help_text="Введите урок",
         related_name="paid_lessons"
     )
-    amount = models.IntegerField(
+    amount = models.PositiveIntegerField(
         blank=True,
         null=True,
         verbose_name="Сумма оплаты",
@@ -102,6 +102,9 @@ class Payment(models.Model):
     class Meta:
         verbose_name = "Оплата"
         verbose_name_plural = "Оплата"
+
+    def __str__(self):
+        return self.amount
 
 
 class Subscription(models.Model):
@@ -121,14 +124,48 @@ class Subscription(models.Model):
         null=True,
         verbose_name="Курс",
         help_text="Введите курс",
-        related_name="course_subs"
+        related_name="course_subs",
     )
-    # subscription_status = models.BooleanField(
-    #     blank=True,
-    #     null=True,
-    #     verbose_name="Подписка",
-    #     help_text="Введите статус подписки",
-    # )
+
     class Meta:
         verbose_name = "Подписка"
         verbose_name_plural = "Подписки"
+
+
+class Remuneration(models.Model):
+    amount = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Сумма оплаты",
+        help_text="Введите сумму оплаты",
+    )
+    session_id = models.CharField(
+        max_length=225,
+        blank=True,
+        null=True,
+        verbose_name="ID сессии",
+        help_text="Укажите ID сессии",
+    )
+    link = models.URLField(
+        max_length=400,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на оплату",
+        help_text="Укажите ссылку на оплату",
+    )
+    user = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        verbose_name="Пользователь",
+        help_text="Укажите пользователя",
+        related_name="remunerations",
+    )
+
+    class Meta:
+        verbose_name = "WEB-оплата"
+        verbose_name_plural = "WEB-оплата"
+
+    def __str__(self):
+        return self.amount
