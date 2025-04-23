@@ -1,6 +1,9 @@
 # Используем официальный slim-образ Python 3.12
 FROM python:3.12-slim
 
+# Объявляем автора
+LABEL maintainer olegtimer@yandex.ru
+
 # Устанавливаем рабочую директорию в контейнере
 WORKDIR /app
 
