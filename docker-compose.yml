@@ -39,13 +39,12 @@ services:
   celery:
     container_name: celery
     build: .
-#    command: sh -c "celery -A conf.celery worker --loglevel=INFO -B"
     command: sh -c "celery -A config worker --loglevel=INFO -B"
     restart: on-failure
     env_file: "./.env"
     environment:
       PG_DB_HOST: db
-      broker_url: amqp://guest:guest@bo-rabbitmq:5672
+#      broker_url: amqp://guest:guest@bo-rabbitmq:5672
     depends_on:
       - db
       - redis
