@@ -8,13 +8,16 @@ load_dotenv()
 
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
+# Тип сервера. Может быть production или local.
+SERVER_TYPE = os.environ.get("SERVER_TYPE", "")
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True if os.getenv("DEBUG") == "True" else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -71,15 +74,18 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
-
+if SERVER_TYPE == "local":
+    host_db = "127.0.0.1"
+else:
+    host_db = "db"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("HOST"),
-        "PORT": os.getenv("PORT"),
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": host_db,
+        "PORT": os.getenv("POSTGRES_PORT"),
     }
 }
 
