@@ -10,4 +10,5 @@ stripe==11.6.0
 forex-python==1.8
 celery==5.4.0
 django-celery-beat==2.7.0
-redis==5.2.1
+gunicorn
+django-redis
