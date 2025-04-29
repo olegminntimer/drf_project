@@ -10,7 +10,6 @@ load_dotenv()
 
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
-# Тип сервера. Может быть production или local.
 SERVER_TYPE = os.environ.get("SERVER_TYPE", "")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
