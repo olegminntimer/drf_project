@@ -76,7 +76,8 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
-if SERVER_TYPE == "local":
+# if SERVER_TYPE == "local":
+if True:
     host_db = "127.0.0.1"
 else:
     host_db = "db"
