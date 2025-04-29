@@ -15,7 +15,7 @@ SERVER_TYPE = os.environ.get("SERVER_TYPE", "")
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECRET_KEY = os.getenv("SECRET_KEY")
-SECRET_KEY = '^phwIS,8986MVs7XkcHjK8se{1#~>\/]FDoimNN2j-N^_t:F8F'
+SECRET_KEY = '^phwIS,8986MVs7XkcHjK8se{1#~>]FDoimNN2j-N^_t:F8F'
 
 DEBUG = True if os.getenv("DEBUG") == "True" else False
 
