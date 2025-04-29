@@ -13,8 +13,8 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "date",
-        "course_paid",
-        "lesson_paid",
+        "paid_course",
+        "paid_lesson",
         "amount",
         "payment_method",
     )
