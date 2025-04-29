@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from lms.models import Course
 from users.models import User, Payment, Subscription
 
 
