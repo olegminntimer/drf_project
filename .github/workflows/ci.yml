@@ -42,7 +42,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Do docker-compose.yml
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Run migrations
         run: python manage.py migrate
