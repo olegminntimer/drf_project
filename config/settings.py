@@ -79,7 +79,7 @@ REST_FRAMEWORK = {
 if SERVER_TYPE == "local":
     host_db = "127.0.0.1"
 else:
-    host_db = "db"
+    host_db = "127.0.0.1"
 
 DATABASES = {
     "default": {
