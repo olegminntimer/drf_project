@@ -1,6 +1,6 @@
 name: Django CI
 
-on: [push, pullrequest]
+on: [push,]
 
 jobs:
   lint:
