@@ -79,6 +79,7 @@ if SERVER_TYPE == "local":
     host_db = "127.0.0.1"
 else:
     host_db = "db"
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
