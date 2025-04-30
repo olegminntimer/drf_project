@@ -75,15 +75,15 @@ class Payment(models.Model):
         help_text="Введите курс",
         related_name="paid_courses"
     )
-    paid_lesson = models.ForeignKey(
-        Lesson,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name="Урок",
-        help_text="Введите урок",
-        related_name="paid_lessons"
-    )
+    # paid_lesson = models.ForeignKey(
+    #     Lesson,
+    #     on_delete=models.SET_NULL,
+    #     blank=True,
+    #     null=True,
+    #     verbose_name="Урок",
+    #     help_text="Введите урок",
+    #     related_name="paid_lessons"
+    # )
     amount = models.PositiveIntegerField(
         blank=True,
         null=True,
