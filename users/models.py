@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from lms.models import Course, Lesson
+from lms.models import Course#, Lesson
 
 
 class User(AbstractUser):
