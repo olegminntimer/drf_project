@@ -14,7 +14,7 @@ class PaymentAdmin(admin.ModelAdmin):
         "user",
         "date",
         "paid_course",
-        "paid_lesson",
+        # "paid_lesson",
         "amount",
         "payment_method",
     )
