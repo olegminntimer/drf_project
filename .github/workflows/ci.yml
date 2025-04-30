@@ -45,7 +45,7 @@ jobs:
 #        run: docker compose up -d
 
       - name: Run migrations
-        run: python manage.py migrate --test
+        run: python manage.py migrate
 
       - name: Run tests
         run: python manage.py test
