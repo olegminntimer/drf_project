@@ -59,6 +59,7 @@ class LessonAPITestCase(APITestCase):
                         "id": self.course.pk,
                         "lessons": [self.lesson.name],
                         "count_lesson": 1,
+                        "user_subs": False,
                         "name": self.course.name,
                         "description": None,
                         "preview": None,
