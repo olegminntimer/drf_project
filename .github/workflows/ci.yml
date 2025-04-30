@@ -44,7 +44,7 @@ jobs:
 #      - name: Do docker-compose.yml
 #        run: docker compose up -d
 
-      - name: Run migrations
+      - name: Run_migrations
         run: python manage.py migrate
 
       - name: Run tests
