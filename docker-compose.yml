@@ -41,8 +41,7 @@ services:
 #      - redis
 
   nginx:
-    build:
-      context: ./nginx
+    image: nginx:stable-alpine
     ports:
       - "80:80"
     volumes:
