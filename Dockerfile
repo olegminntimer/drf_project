@@ -14,8 +14,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# RUN mkdir -p /app/staticfiles && chmod -R 755 /app/staticfiles
+# RUN mkdir -p /app/staticfiles && chown -R 1000:1000 /app
+RUN mkdir -p /app/staticfiles && chown -R 1000:1000 /app
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py collectstatic --noinput *.html && gunicorn config.wsgi: application --bind 0.0.0.0:8000" ]
+CMD ["sh", "-c", "python manage.py collectstatic --noinput *.html && gunicorn config.wsgi:application --bind 0.0.0.0:8000" ]
