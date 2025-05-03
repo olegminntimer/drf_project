@@ -36,13 +36,17 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-#      - name: Do docker-compose.yml
-#        run: docker compose up -d
 
       - name: Run_migrations
         run: python manage.py migrate
@@ -85,7 +89,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Deploy_ to server
+      - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
