@@ -1,47 +1,78 @@
 services:
+
   web:
     container_name: web
     build: .
     command: sh -c "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
+#      - static_volume:/media
       - staticfiles:/app/static
     expose:
       - "8000"
     depends_on:
       - db
-      - redis
     env_file:
       - ./.env
 
-#  celery:
-#    container_name: celery
-#    build: .
-#    command: sh -c "celery -A config worker --loglevel=INFO -B"
-#    restart: on-failure
-#    env_file: "./.env"
-#    environment:
-#      PG_DB_HOST: db
-##      broker_url: amqp://guest:guest@bo-rabbitmq:5672
-#    depends_on:
-#      - db
-#      - redis
-#
-#  celery-beat:
-#    container_name: celery-beat
-#    build: .
-#    command: bash -c "celery -A config beat --loglevel=INFO"
-#    volumes:
-#      - .:/app
-#    env_file:
-#      - ./.env
-#    restart: on-failure
-#    depends_on:
-#      - celery
-#      - redis
+  db:
+    container_name: db
+    image: postgres:16
+    restart: unless-stopped  # Автоперезапуск при сбоях
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      - ./.env
+    healthcheck: # Проверка работоспособности
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis:
+    container_name: redis
+    image: redis:latest
+#    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    #      - ./redis/data:/root/redis
+    #      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    env_file:
+      - ./.env
+
+  worker:
+    container_name: celery
+    image: celery:latest
+    command: sh -c "celery -A config worker --loglevel=INFO"
+    restart: on-failure
+    env_file: "./.env"
+    depends_on:
+      - redis
+
+  beat:
+    container_name: celery-beat
+    image: celery:latest
+    command: bash -c "celery -A config beat --loglevel=INFO"
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
+    restart: on-failure
+    depends_on:
+      - redis
 
   nginx:
-    image: nginx:stable-alpine
+#    image: nginx:stable-alpine
+    build:
+      context: ./nginx
     ports:
       - "80:80"
     volumes:
@@ -49,29 +80,6 @@ services:
       - staticfiles:/app/staticfiles
     depends_on:
       - web
-
-  db:
-    container_name: db
-    image: postgres:16
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-#    ports:
-#      - "5432:5432"
-    env_file:
-      - ./.env
-
-  redis:
-    container_name: redis
-    image: redis:7.4
-#    restart: always
-#    ports:
-#      - "6379:6379"
-    volumes:
-      - redis_data:/data
-#      - ./redis/data:/root/redis
-#      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
-    env_file:
-      - ./.env
 
 volumes:
   postgres_data:
