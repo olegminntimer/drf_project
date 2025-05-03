@@ -29,11 +29,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
       - ./.env
-    healthcheck: # Проверка работоспособности
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+#    healthcheck: # Проверка работоспособности
+#      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 3
 
   redis:
     container_name: redis
