@@ -17,7 +17,7 @@ class CourseSerializer(serializers.ModelSerializer):
         return Lesson.objects.filter(course=course).count()
 
     def get_user_subs(self, course):
-        user = self.context['request'].user
+        user = self.context["request"].user
         return Subscription.objects.filter(user=user, course=course).exists()
 
     class Meta:

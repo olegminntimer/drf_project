@@ -58,7 +58,7 @@ class Payment(models.Model):
         on_delete=models.SET_NULL,
         verbose_name="Пользователь",
         help_text="Укажите пользователя",
-        related_name="user_payments"
+        related_name="user_payments",
     )
     date = models.DateField(
         # auto_now=True,
@@ -74,7 +74,7 @@ class Payment(models.Model):
         null=True,
         verbose_name="Курс",
         help_text="Введите курс",
-        related_name="paid_courses"
+        related_name="paid_courses",
     )
     # paid_lesson = models.ForeignKey(
     #     Lesson,
@@ -116,7 +116,7 @@ class Subscription(models.Model):
         null=True,
         verbose_name="Пользователь",
         help_text="Укажите пользователя",
-        related_name="user_subs"
+        related_name="user_subs",
     )
     course = models.ForeignKey(
         Course,

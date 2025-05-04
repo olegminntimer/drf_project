@@ -1,9 +1,9 @@
 import os
 import sys
-import certifi
 from datetime import timedelta
 from pathlib import Path
 
+import certifi
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,7 +23,9 @@ SECRET_KEY = "secret-key-test"
 #     raise ValueError("SECRET_KEY must be set in production")
 
 # ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
+ALLOWED_HOSTS = (
+    os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
+)
 if DEBUG:
     ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
 
@@ -83,11 +85,11 @@ REST_FRAMEWORK = {
     ],
 }
 
-if 'test' in sys.argv or os.getenv('GITHUB_ACTIONS') == 'true':
+if "test" in sys.argv or os.getenv("GITHUB_ACTIONS") == "true":
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'test_db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "test_db.sqlite3",
         }
     }
 else:
@@ -132,7 +134,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
-if 'test' in sys.argv:
+if "test" in sys.argv:
     STATICFILES_DIRS = []  # Отключаем проверку статики для тестов
 else:
     STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -215,7 +217,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Настройки для production
 if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

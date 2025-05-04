@@ -17,16 +17,13 @@ class SubscriptionAPITestCase(APITestCase):
 
     def test_subscription(self):
         url = reverse("users:subscription")
-        data = {
-            "user": self.user.pk,
-            "course": self.course.pk
-        }
+        data = {"user": self.user.pk, "course": self.course.pk}
         response = self.client.post(
             url,
             data=json.dumps(data),
-            content_type='application/json',
+            content_type="application/json",
             # Отключаем follow, чтобы не следовать за редиректами
-            follow=False
+            follow=False,
         )
         # Проверяем либо 201 (если APPEND_SLASH=False), либо 301 (если APPEND_SLASH=True)
         self.assertEqual(response.status_code, 301)
