@@ -52,7 +52,6 @@ jobs:
         run: python manage.py test
         env:
           SECRET_KEY: test_secret_key
-#          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
   build:
     needs: test
@@ -85,16 +84,17 @@ jobs:
 
       - name: Create .env file
         run: |
-          touch .env
-          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .env  #Удаление кавычек в файле. P.S. их не должно быть в секретах
+          echo "${{ secrets.ENV_FILE }}" > .env
+#          touch .env
+#          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .env  #Удаление кавычек в файле. P.S. их не должно быть в секретах
 
-      - name: Copy file
+      - name: Copy file to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "docker-compose.yml, .env"
+          source: "docker-compose.yml,.env"
           target: ${{ secrets.DEPLOY_DIR }}
 
   deploy:
@@ -103,30 +103,18 @@ jobs:
 
     steps:
       - name: Deploy application
-        uses: appleboy/ssh-action@v0.1.7
+        uses: webfactory/ssh-agent@v0.9.0
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Deploy_to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ${{ secrets.DEPLOY_DIR }}
-            docker compose down
-            docker compose pull
-            docker compose up -d
-#      - name: Set up SSH
-#        uses: webfactory/ssh-agent@v0.9.0
-#        with:
-#          ssh-private-key: ${{ secrets.SSH_KEY }}
-#
-#      - name: Deploy_to server
-#        run: |
-#          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-#          cd ${{ secrets.DEPLOY_DIR }}
-#          sudo docker compose down
-##          sudo docker stop drf_project || true
-##          sudo docker rm drf_project || trrue
-#          sudo docker container rm $(docker ps -a -q)
-#          sudo docker compose up -d --build
-##          sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
-##          sudo docker run -d --name drf_project -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
-#          EOF
+            sudo docker compose down
+            sudo docker container rm $(docker ps -a -q)
+            sudo docker compose up -d --build
+          EOF
