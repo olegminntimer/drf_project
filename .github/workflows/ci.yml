@@ -104,6 +104,8 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ${{ secrets.DEPLOY_DIR }}
+            export DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}
+            export GITHUB_SHA=${{ github.sha }}
             sudo docker compose down
             sudo docker compose pull
             sudo docker compose up -d --build
