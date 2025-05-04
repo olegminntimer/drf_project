@@ -51,7 +51,8 @@ services:
     container_name: celery_worker
     build:
       context: .
-    command: celery -A config worker --loglevel=info
+#    command: celery -A config worker --loglevel=info
+    command: celery -A config worker -l INFO
 #    restart: on-failure
     env_file: "./.env"
     depends_on:
@@ -62,7 +63,7 @@ services:
     container_name: celery_beat
     build:
       context: .
-    command: celery -A config beat --loglevel=info
+    command: celery -A config beat -l INFO
     env_file:
       - ./.env
 #    restart: on-failure
