@@ -133,7 +133,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+if 'test' in sys.argv:
+    STATICFILES_DIRS = []  # Отключаем проверку статики для тестов
+else:
+    STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
