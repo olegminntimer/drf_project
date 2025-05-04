@@ -20,7 +20,11 @@ class SubscriptionAPITestCase(APITestCase):
             "user": self.user.pk,
             "course": self.course.pk
         }
-        response = self.client.post(url, data)
+        response = self.client.post(
+            url,
+            data,
+            content_type='application/json'
+        )
         result = response.json()
         self.assertEqual(
             response.status_code, status.HTTP_200_OK
