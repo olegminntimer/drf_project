@@ -91,20 +91,19 @@ if 'test' in sys.argv or os.getenv('GITHUB_ACTIONS') == 'true':
         }
     }
 else:
-    # if SERVER_TYPE == "local":
-    #     host_db = "127.0.0.1"
-    # else:
-    #     host_db = "db"
+    if SERVER_TYPE == "local":
+        host_db = "127.0.0.1"
+    else:
+        host_db = "db"
 
-    # Установлены fallback-значения для переменных окружения, чтобы не вызвать ошибки, если они не заданы.
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB", "postgres"),
-            "USER": os.getenv("POSTGRES_USER", "postgres"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
-            "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-            "PORT": os.getenv("POSTGRES_PORT", "5432"),
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv(host_db),
+            "PORT": os.getenv("POSTGRES_PORT"),
         }
     }
 
