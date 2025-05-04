@@ -106,9 +106,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           source: "docker-compose.yml,.env"
           target: ${{ secrets.DEPLOY_DIR }}
-          strip_components: 1  # Убирает лишние пути
-          overwrite: true  # Разрешает перезапись
-          rm: true  # Удаляет временные файлы
+#          strip_components: 1  # Убирает лишние пути
+#          overwrite: true  # Разрешает перезапись
+#          rm: true  # Удаляет временные файлы
 
       - name: Deploy application
         uses: appleboy/ssh-action@v0.1.7
