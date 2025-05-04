@@ -62,21 +62,44 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Create .env file
-        run: |
-          touch .env
-          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .env  #Удаление кавычек в файле. P.S. их не должно быть в секретах
       - name: Log in Docker hub
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }} .
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }} .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:${{ github.sha }} nginx/.
 
       - name: Push Docker image in Docker hub
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
+        run: |
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:${{ github.sha }}
+
+  copy_files_in_server:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Create .env file
+        run: |
+          touch .env
+          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .env  #Удаление кавычек в файле. P.S. их не должно быть в секретах
+
+      - name: Copy file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "docker-compose.yml, .env"
+          target: ${{ secrets.DEPLOY_DIR }}
+
 
   deploy:
-    needs: build
+    needs: [build, copy_files_in_server]
     runs-on: ubuntu-latest
 
     steps:
@@ -88,9 +111,12 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          
-          sudo docker stop drf_project || true
-          sudo docker rm drf_project || true
-          sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
-          sudo docker run -d --name drf_project -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
+          cd ${{ secrets.DEPLOY_DIR }}
+          sudo docker compose down
+#          sudo docker stop drf_project || true
+#          sudo docker rm drf_project || trrue
+          sudo docker container rm $(docker ps -a -q)
+          sudo docker compose up -d --build
+#          sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
+#          sudo docker run -d --name drf_project -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
           EOF
