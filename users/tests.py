@@ -24,7 +24,7 @@ class SubscriptionAPITestCase(APITestCase):
         }
         response = self.client.post(
             url,
-            data=json.dumps(data), # Явно сериализуем в JSON
+            data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -37,7 +37,6 @@ class SubscriptionAPITestCase(APITestCase):
         # self.assertEqual(
         #     result, {'message': 'Вы подписались на обновления курса'}
         # )
-
         url = reverse("users:subscription")
         data = {
             "user": self.user.pk,
