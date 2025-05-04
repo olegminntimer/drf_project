@@ -16,8 +16,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      db:
-        condition: service_healthy
+      - redis
+      - db
     env_file:
       - ./.env
     healthcheck:
@@ -61,8 +61,8 @@ services:
 #    restart: on-failure
     env_file: "./.env"
     depends_on:
-      - redis
-      - db
+      web:
+        condition: service_healthy
 
   celery_beat:
     container_name: celery_beat
@@ -73,8 +73,8 @@ services:
       - ./.env
 #    restart: on-failure
     depends_on:
-      - redis
-      - db
+      web:
+        condition: service_healthy
 
   nginx:
 #    image: ${DOCKER_HUB_USERNAME}/nginx:${github.sha}
