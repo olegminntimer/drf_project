@@ -10,7 +10,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
@@ -31,7 +31,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Install_Python
+      - name: Install Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -48,13 +48,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run_migrations
-        run: python manage.py migrate
-
-      - name: Run _tests
+      - name: Run tests
         run: python manage.py test
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SECRET_KEY: test_secret_key
+#          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
   build:
     needs: test
@@ -67,7 +65,7 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo '"${{ secrets.SECRET_KEY }}"' | sed "s/\"//g" > .env
+          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .  Удаление кавычек в файле. P.S. их не должно быть в секретах
 
       - name: Log in Docker hub
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
