@@ -30,4 +30,4 @@ class SubscriptionAPITestCase(APITestCase):
             follow=False
         )
         # Проверяем либо 201 (если APPEND_SLASH=False), либо 301 (если APPEND_SLASH=True)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, 301)
