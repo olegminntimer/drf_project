@@ -84,9 +84,8 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-#          touch .env
-#          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .env  #Удаление кавычек в файле. P.S. их не должно быть в секретах
+          touch .env
+          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .env  #Удаление кавычек в файле. P.S. их не должно быть в секретах
 
       - name: Copy file to server
         uses: appleboy/scp-action@v0.1.7
