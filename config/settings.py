@@ -14,10 +14,11 @@ SERVER_TYPE = os.environ.get("SERVER_TYPE", "")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+# SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
+SECRET_KEY = "secret-key-test"
 # if not SECRET_KEY and not DEBUG:
 #     raise ValueError("SECRET_KEY must be set in production")
 
