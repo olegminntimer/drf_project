@@ -97,26 +97,36 @@ jobs:
           source: "docker-compose.yml, .env"
           target: ${{ secrets.DEPLOY_DIR }}
 
-
   deploy:
     needs: [build, copy_files_in_server]
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Deploy application
+        uses: appleboy/ssh-action@v0.1.7
         with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
-
-      - name: Deploy_to server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd ${{ secrets.DEPLOY_DIR }}
-          sudo docker compose down
-#          sudo docker stop drf_project || true
-#          sudo docker rm drf_project || trrue
-          sudo docker container rm $(docker ps -a -q)
-          sudo docker compose up -d --build
-#          sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
-#          sudo docker run -d --name drf_project -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
-          EOF
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ${{ secrets.DEPLOY_DIR }}
+            docker compose down
+            docker compose pull
+            docker compose up -d
+#      - name: Set up SSH
+#        uses: webfactory/ssh-agent@v0.9.0
+#        with:
+#          ssh-private-key: ${{ secrets.SSH_KEY }}
+#
+#      - name: Deploy_to server
+#        run: |
+#          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+#          cd ${{ secrets.DEPLOY_DIR }}
+#          sudo docker compose down
+##          sudo docker stop drf_project || true
+##          sudo docker rm drf_project || trrue
+#          sudo docker container rm $(docker ps -a -q)
+#          sudo docker compose up -d --build
+##          sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
+##          sudo docker run -d --name drf_project -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
+#          EOF
