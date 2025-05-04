@@ -13,7 +13,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install flake8
         run: |
@@ -34,7 +34,7 @@ jobs:
       - name: Install_Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Cache pip
         uses: actions/cache@v3
@@ -48,8 +48,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run_migrations
-        run: python manage.py migrate
+#      - name: Run_migrations
+#        run: python manage.py migrate
 
       - name: Run tests
         run: python manage.py test
