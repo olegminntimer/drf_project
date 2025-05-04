@@ -5,8 +5,6 @@ from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
-# Отключаем автоматическое добавление слеша
-APPEND_SLASH = False
 
 load_dotenv()
 
