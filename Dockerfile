@@ -1,5 +1,5 @@
 # Указываем базовый образ
-FROM python:3.11-slim
+FROM python:3.11
 
 # Контактные сведения создателя образа
 LABEL maintainer olegtimer@yandex.ru
@@ -7,9 +7,9 @@ LABEL maintainer olegtimer@yandex.ru
 # Устанавливаем рабочую директорию в контейнере
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y gcc libpq-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y gcc libpq-dev \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Копируем файл с зависимостями и устанавливаем их
 COPY requirements.txt .
@@ -25,4 +25,5 @@ COPY . .
 EXPOSE 8000
 
 # Определяем команду для запуска приложения
+CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:8000" ]
 # CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000" ]
