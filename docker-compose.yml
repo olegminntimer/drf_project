@@ -1,7 +1,9 @@
+version: '3.8'
+
 services:
   web:
     container_name: web
-    image: remusengo/drf_project:latest
+    image: ${DOCKER_USER}/drf_project:${IMAGE_TAG}
 #    build: .
 #    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     command: bash -c "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
@@ -69,7 +71,7 @@ services:
       - db
 
   nginx:
-    image: remusengo/nginx:latest
+    image: ${DOCKER_USER}/nginx:${IMAGE_TAG}
 #    build:
 #      context: ./nginx
     ports:
