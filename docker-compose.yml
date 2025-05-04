@@ -1,7 +1,8 @@
 services:
   web:
     container_name: web
-    build: .
+    image: ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
+#    build: .
 #    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     command: bash -c "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
@@ -68,8 +69,9 @@ services:
       - db
 
   nginx:
-    build:
-      context: ./nginx
+    image: ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:${{ github.sha }}
+#    build:
+#      context: ./nginx
     ports:
       - "80:80"
     volumes:
