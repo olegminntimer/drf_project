@@ -57,22 +57,24 @@ services:
     build:
       context: .
 #    command: celery -A config worker --loglevel=info
-    command: celery -A config worker —loglevel=INFO
+    command: celery -A config worker --loglevel=INFO
 #    restart: on-failure
     env_file: "./.env"
     depends_on:
-      - web
+      - db
+      - redis
 
   celery_beat:
     container_name: celery_beat
     build:
       context: .
-    command: celery -A config beat —loglevel=INFO
+    command: celery -A config beat --loglevel=INFO
     env_file:
       - ./.env
 #    restart: on-failure
     depends_on:
-      - web
+      - db
+      - redis
 
   nginx:
 #    image: ${DOCKER_HUB_USERNAME}/nginx:${github.sha}
