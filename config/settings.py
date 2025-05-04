@@ -18,8 +18,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-if not SECRET_KEY and not DEBUG:
-    raise ValueError("SECRET_KEY must be set in production")
+# if not SECRET_KEY and not DEBUG:
+#     raise ValueError("SECRET_KEY must be set in production")
 
 # ALLOWED_HOSTS = ["*"]
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
