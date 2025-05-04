@@ -104,7 +104,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ${{ secrets.DEPLOY_DIR }}
             sudo docker compose down
-            sudo docker rm -f $(docker ps -aq)
+            sudo docker container rm -f $(docker ps -aq)
             sudo docker compose up -d --build
           EOF
 #            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
