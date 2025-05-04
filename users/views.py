@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+from rest_framework import filters, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -49,18 +49,32 @@ class SubscriptionAPIView(APIView):
     def post(self, *args, **kwargs):
         user = self.request.user
         course_id = self.request.data.get("course")
-        print(self.request.data.get("course"))
-        course_item = get_object_or_404(Course, pk=course_id)
-        subs_item = Subscription.objects.filter(user=user, course=course_item)
 
-        if subs_item.exists():
-            subs_item.delete()
-            message = "Вы отписались от обновления курса"
+        if not course_id:
+            return Response({'error': 'Course ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
+        try:
+            course = Course.objects.get(pk=course_id)
+        except Course.DoesNotExist:
+            return Response({'error': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Логика подписки/отписки
+        subscription, created = Subscription.objects.get_or_create(
+            user=user,
+            course=course
+        )
+
+        if created:
+            return Response(
+                {'message': 'Вы подписались на обновления курса'},
+                status=status.HTTP_201_CREATED
+            )
         else:
-            subs_item = Subscription.objects.create(user=user, course=course_item)
-            message = "Вы подписались на обновления курса"
-        return Response({"message": message})
+            subscription.delete()
+            return Response(
+                {'message': 'Вы отписались от обновления курса'},
+                status=status.HTTP_200_OK
+            )
 
 
 class RemunerationCreateAPIView(CreateAPIView):

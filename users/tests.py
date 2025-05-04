@@ -17,7 +17,7 @@ class SubscriptionAPITestCase(APITestCase):
         # self.subscription = Subscription.objects.create(user=self.user, course=self.course)
 
     def test_subscription(self):
-        url = reverse("users:subscription")
+        url = reverse("users:subscription") + '/'
         data = {
             "user": self.user.pk,
             "course": self.course.pk
@@ -30,13 +30,15 @@ class SubscriptionAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertTrue(Subscription.objects.filter(user=self.user, course=self.course).exists())
 
-        # result = response.json()
+        result = response.json()
         # self.assertEqual(
         #     response.status_code, status.HTTP_200_OK
         # )
-        # self.assertEqual(
-        #     result, {'message': 'Вы подписались на обновления курса'}
-        # )
+        self.assertEqual(
+            result, {'message': 'Вы подписались на обновления курса'}
+        )
+        self.assertTrue(Subscription.objects.filter(user=self.user, course=self.course).exists())
+
         url = reverse("users:subscription")
         data = {
             "user": self.user.pk,
