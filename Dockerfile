@@ -1,5 +1,5 @@
 # Указываем базовый образ
-FROM python:3.11
+FROM python:3.11-slim
 
 # Контактные сведения создателя образа
 LABEL maintainer olegtimer@yandex.ru
