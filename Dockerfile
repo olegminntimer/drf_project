@@ -14,7 +14,6 @@ RUN apt-get update \
 
 # Копируем файл с зависимостями и устанавливаем их
 COPY requirements.txt .
-RUN python -m pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем остальные файлы проекта в контейнер
