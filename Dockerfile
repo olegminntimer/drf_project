@@ -23,4 +23,4 @@ COPY . .
 EXPOSE 8000
 
 # Определяем команду для запуска приложения
-CMD ["sh", "-c", "python3 manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000" ]
+CMD ["sh", "-c", "/usr/local/bin/python3 manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000" ]
