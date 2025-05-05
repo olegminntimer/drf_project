@@ -1,5 +1,5 @@
 # Указываем базовый образ
-FROM python:3.10
+FROM python:3.9
 
 # Контактные сведения создателя образа
 LABEL maintainer olegtimer@yandex.ru
