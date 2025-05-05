@@ -12,78 +12,327 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
-        ('lms', '0001_initial'),
+        ("auth", "0012_alter_user_first_name_max_length"),
+        ("lms", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
-                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
-                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('email', models.EmailField(help_text='Укажите почту', max_length=254, unique=True, verbose_name='Почта')),
-                ('phone', models.CharField(blank=True, help_text='Укажите телефон', max_length=35, null=True, verbose_name='Телефон')),
-                ('city', models.CharField(blank=True, help_text='Укажите город', max_length=150, null=True, verbose_name='Город')),
-                ('avatar', models.ImageField(blank=True, help_text='Загрузите аватар', null=True, upload_to='users/avatars/', verbose_name='Аватар')),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates that this user has all permissions without explicitly assigning them.",
+                        verbose_name="superuser status",
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="first name"
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="last name"
+                    ),
+                ),
+                (
+                    "is_staff",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates whether the user can log into this admin site.",
+                        verbose_name="staff status",
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Designates whether this user should be treated as active. Unselect this instead of deleting accounts.",
+                        verbose_name="active",
+                    ),
+                ),
+                (
+                    "date_joined",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, verbose_name="date joined"
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        help_text="Укажите почту",
+                        max_length=254,
+                        unique=True,
+                        verbose_name="Почта",
+                    ),
+                ),
+                (
+                    "phone",
+                    models.CharField(
+                        blank=True,
+                        help_text="Укажите телефон",
+                        max_length=35,
+                        null=True,
+                        verbose_name="Телефон",
+                    ),
+                ),
+                (
+                    "city",
+                    models.CharField(
+                        blank=True,
+                        help_text="Укажите город",
+                        max_length=150,
+                        null=True,
+                        verbose_name="Город",
+                    ),
+                ),
+                (
+                    "avatar",
+                    models.ImageField(
+                        blank=True,
+                        help_text="Загрузите аватар",
+                        null=True,
+                        upload_to="users/avatars/",
+                        verbose_name="Аватар",
+                    ),
+                ),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.group",
+                        verbose_name="groups",
+                    ),
+                ),
+                (
+                    "user_permissions",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Specific permissions for this user.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.permission",
+                        verbose_name="user permissions",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Пользователь',
-                'verbose_name_plural': 'Пользователи',
+                "verbose_name": "Пользователь",
+                "verbose_name_plural": "Пользователи",
             },
             managers=[
-                ('objects', django.contrib.auth.models.UserManager()),
+                ("objects", django.contrib.auth.models.UserManager()),
             ],
         ),
         migrations.CreateModel(
-            name='Payment',
+            name="Payment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(blank=True, help_text='Введите дату оплаты', null=True, verbose_name='Дата оплаты')),
-                ('amount', models.PositiveIntegerField(blank=True, help_text='Введите сумму оплаты', null=True, verbose_name='Сумма оплаты')),
-                ('payment_method', models.CharField(blank=True, choices=[('cash', 'наличные'), ('bank_transfer', 'перевод на счет')], help_text='Введите способ оплаты', max_length=15, null=True, verbose_name='Способ оплаты')),
-                ('course_paid', models.ForeignKey(blank=True, help_text='Введите курс', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='courses', to='lms.course', verbose_name='Курс')),
-                ('lesson_paid', models.ForeignKey(blank=True, help_text='Введите урок', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='lessons', to='lms.lesson', verbose_name='Урок')),
-                ('user', models.ForeignKey(blank=True, help_text='Укажите пользователя', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='payments', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateField(
+                        blank=True,
+                        help_text="Введите дату оплаты",
+                        null=True,
+                        verbose_name="Дата оплаты",
+                    ),
+                ),
+                (
+                    "amount",
+                    models.PositiveIntegerField(
+                        blank=True,
+                        help_text="Введите сумму оплаты",
+                        null=True,
+                        verbose_name="Сумма оплаты",
+                    ),
+                ),
+                (
+                    "payment_method",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("cash", "наличные"),
+                            ("bank_transfer", "перевод на счет"),
+                        ],
+                        help_text="Введите способ оплаты",
+                        max_length=15,
+                        null=True,
+                        verbose_name="Способ оплаты",
+                    ),
+                ),
+                (
+                    "course_paid",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Введите курс",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="courses",
+                        to="lms.course",
+                        verbose_name="Курс",
+                    ),
+                ),
+                (
+                    "lesson_paid",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Введите урок",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="lessons",
+                        to="lms.lesson",
+                        verbose_name="Урок",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Укажите пользователя",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="payments",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Пользователь",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Оплата',
-                'verbose_name_plural': 'Оплата',
+                "verbose_name": "Оплата",
+                "verbose_name_plural": "Оплата",
             },
         ),
         migrations.CreateModel(
-            name='Remuneration',
+            name="Remuneration",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.PositiveIntegerField(blank=True, help_text='Введите сумму оплаты', null=True, verbose_name='Сумма оплаты')),
-                ('session_id', models.CharField(blank=True, help_text='Укажите ID сессии', max_length=225, null=True, verbose_name='ID сессии')),
-                ('link', models.URLField(blank=True, help_text='Укажите ссылку на оплату', max_length=400, null=True, verbose_name='Ссылка на оплату')),
-                ('user', models.ForeignKey(blank=True, help_text='Укажите пользователя', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='remunerations', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "amount",
+                    models.PositiveIntegerField(
+                        blank=True,
+                        help_text="Введите сумму оплаты",
+                        null=True,
+                        verbose_name="Сумма оплаты",
+                    ),
+                ),
+                (
+                    "session_id",
+                    models.CharField(
+                        blank=True,
+                        help_text="Укажите ID сессии",
+                        max_length=225,
+                        null=True,
+                        verbose_name="ID сессии",
+                    ),
+                ),
+                (
+                    "link",
+                    models.URLField(
+                        blank=True,
+                        help_text="Укажите ссылку на оплату",
+                        max_length=400,
+                        null=True,
+                        verbose_name="Ссылка на оплату",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Укажите пользователя",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="remunerations",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Пользователь",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'WEB-оплата',
-                'verbose_name_plural': 'WEB-оплата',
+                "verbose_name": "WEB-оплата",
+                "verbose_name_plural": "WEB-оплата",
             },
         ),
         migrations.CreateModel(
-            name='Subscription',
+            name="Subscription",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('course', models.ForeignKey(blank=True, help_text='Введите курс', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='courses_subs', to='lms.course', verbose_name='Курс')),
-                ('user', models.ForeignKey(blank=True, help_text='Укажите пользователя', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='users_subs', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "course",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Введите курс",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="courses_subs",
+                        to="lms.course",
+                        verbose_name="Курс",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Укажите пользователя",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="users_subs",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Пользователь",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Подписка',
-                'verbose_name_plural': 'Подписки',
+                "verbose_name": "Подписка",
+                "verbose_name_plural": "Подписки",
             },
         ),
     ]

@@ -4,5 +4,5 @@ allowed_site = "youtube.com"
 
 
 def validate_allowed_sites(value):
-    if not allowed_site in value.lower():
+    if allowed_site not in value.lower():
         raise ValidationError("Разрешено переходить только на youtube.com!")

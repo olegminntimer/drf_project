@@ -6,14 +6,14 @@ from rest_framework.generics import (
     UpdateAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
-
 from rest_framework.viewsets import ModelViewSet
 
-from .tasks import subscription_update
 from lms.models import Course, Lesson
 from lms.paginators import CustomPagination
-from lms.serializers import CourseSerializer, LessonSerializer, LessonDetailSerializer
+from lms.serializers import CourseSerializer, LessonDetailSerializer, LessonSerializer
 from users.permissions import IsModer, IsOwner
+
+from .tasks import subscription_update
 
 
 class CourseViewSet(ModelViewSet):
