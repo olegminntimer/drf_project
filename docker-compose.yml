@@ -21,6 +21,7 @@ services:
   nginx:
     build:
       context: ./nginx
+    restart: unless-stopped # Автоперезапуск при сбоях
     ports:
       - "80:80"
     volumes:
