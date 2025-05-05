@@ -1,5 +1,5 @@
 # Указываем базовый образ
-FROM python:3.11-slim
+FROM python:3.10
 
 # Контактные сведения создателя образа
 LABEL maintainer olegtimer@yandex.ru
@@ -9,9 +9,10 @@ WORKDIR /app
 
 RUN apt-get update \
     && apt-get install -y gcc libpq-dev \
+    && apt-get install -y python3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/\*
-# && apt-get install -y python3 \
+
 # Копируем файл с зависимостями и устанавливаем их
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
