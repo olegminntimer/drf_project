@@ -3,7 +3,8 @@ version: '3.9'
 services:
   web:
     container_name: web
-    build: .
+    image: remusengo/drf_project
+#    build: .
 #    restart: unless-stopped
     command: sh -c "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
@@ -20,8 +21,9 @@ services:
       - ./.env
 
   nginx:
-    build:
-      context: ./nginx
+    image: remusengo/nginx
+#    build:
+#      context: ./nginx
 #    restart: unless-stopped # Автоперезапуск при сбоях
     ports:
       - "80:80"
