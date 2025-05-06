@@ -102,3 +102,4 @@ volumes:
   static_volume:
 #  staticfiles:
   redis_data:
+  app:
