@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check o_ut code
+      - name: Check out code
         uses: actions/checkout@v3
 
       - name: Log in Docker hub
