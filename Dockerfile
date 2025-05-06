@@ -15,12 +15,12 @@ RUN apt-get update \
 # Копируем файл с зависимостями и устанавливаем их
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN python3 --version
 
 # Копируем остальные файлы проекта в контейнер
 COPY . .
 
 # Открываем порт 8000 для взаимодействия с приложением
 EXPOSE 8000
-RUN which python3
 # Определяем команду для запуска приложения
 CMD ["sh", "-c", "python3 manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000" ]
