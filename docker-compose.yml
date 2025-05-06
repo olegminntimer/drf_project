@@ -64,6 +64,7 @@ services:
 
   celery_worker:
     container_name: celery_worker
+    image: remusengo/drf_project
 #    build:
 #      context: .
     command: celery -A config worker --loglevel info
@@ -79,6 +80,7 @@ services:
 
   celery_beat:
     container_name: celery_beat
+    image: remusengo/drf_project
 #    build:
 #      context: .
     command: celery -A config beat --loglevel info
