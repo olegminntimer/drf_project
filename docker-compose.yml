@@ -13,8 +13,9 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+
     env_file:
       - ./.env
 
