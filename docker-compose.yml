@@ -91,9 +91,8 @@ services:
 #    restart: unless-stopped
 #    restart: on-failure
     depends_on:
-      - db
-      - redis
-      - web
+      db:
+        condition: service_healthy
 
 
 
