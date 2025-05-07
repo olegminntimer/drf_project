@@ -75,7 +75,7 @@ services:
     env_file: "./.env"
     depends_on:
       - db
-      - redis
+      - redis-1
       - web
 
   celery_beat:
@@ -92,7 +92,7 @@ services:
 #    restart: on-failure
     depends_on:
       - db
-      - redis
+      - redis-1
       - web
 
 
