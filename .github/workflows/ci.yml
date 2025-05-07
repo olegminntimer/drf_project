@@ -108,6 +108,3 @@ jobs:
           sudo docker compose pull
           sudo docker compose up -d --build
           EOF
-#          sudo docker container rm -f $(docker ps -aq)
-#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
-#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:${{ github.sha }}
