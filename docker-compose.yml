@@ -1,26 +1,29 @@
-version: '3.8'
+version: '3.9'
 
 services:
   web:
     container_name: web
-    build: .
+    image: remusengo/drf_project
+#    build: .
 #    restart: unless-stopped
     command: sh -c "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - .:/app
+      - app:/app
       - static_volume:/app/staticfiles
 #      - staticfiles:/app/static
     expose:
       - "8000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+
     env_file:
       - ./.env
 
   nginx:
-    build:
-      context: ./nginx
+    image: remusengo/nginx
+#    build:
+#      context: ./nginx
 #    restart: unless-stopped # Автоперезапуск при сбоях
     ports:
       - "80:80"
@@ -61,28 +64,35 @@ services:
 
   celery_worker:
     container_name: celery_worker
-    build:
-      context: .
+    image: remusengo/drf_project
+#    build:
+#      context: .
     command: celery -A config worker --loglevel info
 #    restart: unless-stopped
 #    restart: on-failure
+    volumes:
+      - app:/app
     env_file: "./.env"
     depends_on:
       - db
       - redis
+      - web
 
   celery_beat:
     container_name: celery_beat
-    build:
-      context: .
+    image: remusengo/drf_project
+#    build:
+#      context: .
     command: celery -A config beat --loglevel info
     env_file:
       - ./.env
+    volumes:
+      - app:/app
 #    restart: unless-stopped
 #    restart: on-failure
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
 
 
 
@@ -91,3 +101,4 @@ volumes:
   static_volume:
 #  staticfiles:
   redis_data:
+  app:

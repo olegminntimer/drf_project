@@ -22,12 +22,12 @@ SECRET_KEY = "secret-key-test"
 # if not SECRET_KEY and not DEBUG:
 #     raise ValueError("SECRET_KEY must be set in production")
 
-# ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = (
-    os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
-)
-if DEBUG:
-    ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
+ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = (
+#     os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
+# )
+# if DEBUG:
+#     ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
