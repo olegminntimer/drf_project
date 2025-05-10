@@ -155,31 +155,18 @@ SIMPLE_JWT = {
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 
-REDIS_HOST = "redis" if os.getenv("DOCKER_ENV") == "true" else "127.0.0.1"
+REDIS_HOST = "redis" if os.getenv("DOCKER_ENV") == "True" else "127.0.0.1"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": f"redis://{REDIS_HOST}:6379/1",
     }
 }
-
+# URL-адрес брокера сообщений
 CELERY_BROKER_URL = f"redis://{REDIS_HOST}:6379/0"
+# URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:6379/0"
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#         "LOCATION": "redis://redis:6379/1",
-#     }
-# }
-#
-# # Настройки для Celery
-#
-# # URL-адрес брокера сообщений
-# CELERY_BROKER_URL = "redis://redis:6379/0"  # Например, Redis, который по умолчанию работает на порту 6379
-#
-# # URL-адрес брокера результатов, также Redis
-# CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = TIME_ZONE
