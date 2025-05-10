@@ -1,6 +1,6 @@
 name: Django CI
 
-on: [push,]
+on: [push, pull_request]
 
 jobs:
   lint:
@@ -10,18 +10,15 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install flake8
         run: |
           python -m pip install --upgrade pip
           pip install flake8
-
-      - name: Run migrations
-        run: python manage.py migrate
 
       - name: Run flake8
         run: flake8 .
@@ -34,21 +31,20 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Install Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run migrations
-        run: python manage.py migrate
-
       - name: Run tests
         run: python manage.py test
+        env:
+          SECRET_KEY: test_secret_key
 
   build:
     needs: test
@@ -62,26 +58,56 @@ jobs:
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:latest .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:latest nginx/.
 
       - name: Push Docker image in Docker hub
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+        run: |
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:latest
 
-  deploy:
-    needs: build
+  copy_files_in_server:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Create .env file
+        run: |
+          touch .env
+          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .env  #Удаление кавычек в файле. P.S. их не должно быть в секретах
+
+      - name: Copy file to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: ".,docker-compose.yml,.env,Dockerfile,nginx/Dockerfile"
+          target: ${{ secrets.DEPLOY_DIR }}
+          strip_components: 1
+
+  deploy:
+    needs: [build, copy_files_in_server]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set u_p SSH
+        uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
       - name: Deploy to server
         run: |
-          ssh -0 StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          docker stop myapp || true
-          docker rm myapp || true
-          docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd ${{ secrets.DEPLOY_DIR }}
+          sudo docker compose down
+          sudo docker compose pull
+          sudo docker compose up -d --build
           EOF
+#          sudo docker container rm -f $(docker ps -aq)
+#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/drf_project:${{ github.sha }}
+#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:${{ github.sha }}

@@ -1,11 +1,11 @@
+from datetime import datetime, timedelta
+
 import pytz
+from django.core.mail import send_mail
+from rest_framework.generics import get_object_or_404
 
 from celery import shared_task
 from config.settings import EMAIL_HOST_USER
-from django.core.mail import send_mail
-from rest_framework.generics import get_object_or_404
-from datetime import timedelta, datetime
-
 from lms.models import Course
 from users.models import Subscription, User
 

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from lms.serializers import CourseSerializer
-from users.models import Payment, User, Subscription, Remuneration
+from users.models import Payment, Remuneration, Subscription, User
 
 
 class PaymentSerializer(ModelSerializer):

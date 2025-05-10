@@ -1,80 +1,104 @@
+version: '3.9'
+
 services:
   web:
     container_name: web
-    build: .
+    image: remusengo/drf_project
+#    build: .
+#    restart: unless-stopped
     command: sh -c "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - .:/app
+      - app:/app
       - static_volume:/app/staticfiles
+#      - staticfiles:/app/static
     expose:
       - "8000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+
     env_file:
       - ./.env
 
-#  celery:
-#    container_name: celery
-#    build: .
-#    command: sh -c "celery -A config worker --loglevel=INFO -B"
-#    restart: on-failure
-#    env_file: "./.env"
-#    environment:
-#      PG_DB_HOST: db
-##      broker_url: amqp://guest:guest@bo-rabbitmq:5672
-#    depends_on:
-#      - db
-#      - redis
-#
-#  celery-beat:
-#    container_name: celery-beat
-#    build: .
-#    command: bash -c "celery -A config beat --loglevel=INFO"
-#    volumes:
-#      - .:/app
-#    env_file:
-#      - ./.env
-#    restart: on-failure
-#    depends_on:
-#      - celery
-#      - redis
-
   nginx:
-    build:
-      context: ./nginx
+    image: remusengo/nginx
+#    build:
+#      context: ./nginx
+#    restart: unless-stopped # Автоперезапуск при сбоях
     ports:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - static_volume:/app/staticfiles
+#      - staticfiles:/app/staticfiles
     depends_on:
       - web
 
   db:
     container_name: db
     image: postgres:16
+#    restart: unless-stopped # Автоперезапуск при сбоях
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-#    ports:
-#      - "5432:5432"
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
     env_file:
       - ./.env
+    healthcheck: # Проверка работоспособности
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   redis:
     container_name: redis
     image: redis:7.4
-#    restart: always
-#    ports:
-#      - "6379:6379"
+#    restart: unless-stopped
+    ports:
+      - "6379:6379"
     volumes:
       - redis_data:/data
-#      - ./redis/data:/root/redis
-#      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
     env_file:
       - ./.env
+    command: redis-server --save 60 1 --loglevel warning
+
+  celery_worker:
+    container_name: celery_worker
+    image: remusengo/drf_project
+#    build:
+#      context: .
+    command: celery -A config worker --loglevel info
+#    restart: unless-stopped
+#    restart: on-failure
+    volumes:
+      - app:/app
+    env_file: "./.env"
+    depends_on:
+      - db
+      - redis
+      - web
+
+  celery_beat:
+    container_name: celery_beat
+    image: remusengo/drf_project
+#    build:
+#      context: .
+    command: celery -A config beat --loglevel info
+    env_file:
+      - ./.env
+    volumes:
+      - app:/app
+#    restart: unless-stopped
+#    restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+
+
 
 volumes:
   postgres_data:
   static_volume:
+#  staticfiles:
   redis_data:
+  app:
