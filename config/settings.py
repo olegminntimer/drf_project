@@ -99,7 +99,7 @@ else:
             "USER": os.getenv("POSTGRES_USER"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
             "HOST": os.getenv(host_db),
-            "PORT": os.getenv("POSTGRES_PORT"),
+            "PORT": os.getenv("POSTGRES_PORT","5432"),
         }
     }
 
@@ -195,4 +195,4 @@ if EMAIL_USE_TLS and EMAIL_USE_SSL:
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-CSRF_TRUSTED_ORIGINS = ["https://localhost", "http://localhost", "http://158.160.159.138", "https://158.160.159.138"]
+CSRF_TRUSTED_ORIGINS = ["https://localhost", "http://localhost", "http://51.250.47.183", "https://51.250.47.183"]
