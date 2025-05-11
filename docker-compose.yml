@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   web:
     container_name: web
@@ -11,14 +9,25 @@ services:
       - app:/app
       - static_volume:/app/staticfiles
 #      - staticfiles:/app/static
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - init
+    env_file:
+      - ./.env
+
+  init:
+    image: remusengo/drf_project
+    command: >
+      sh -c "python manage.py migrate &&
+      python manage.py createsuperuser --noinput --email admin@example.com --username admin"
+    environment:
+      - DJANGO_SUPERUSER_PASSWORD=adminpassword
+    volumes:
+      - .:/code
     depends_on:
       db:
         condition: service_healthy
-
-    env_file:
-      - ./.env
 
   nginx:
     image: remusengo/nginx
