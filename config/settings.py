@@ -14,20 +14,14 @@ SERVER_TYPE = os.environ.get("SERVER_TYPE", "")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECRET_KEY = os.getenv("SECRET_KEY")
+if "test" in sys.argv:
+    SECRET_KEY = "secret-key-test"
+else:
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-SECRET_KEY = "secret-key-test"
-# if not SECRET_KEY and not DEBUG:
-#     raise ValueError("SECRET_KEY must be set in production")
-
 ALLOWED_HOSTS = ["*"]
-# ALLOWED_HOSTS = (
-#     os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
-# )
-# if DEBUG:
-#     ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -166,7 +160,6 @@ CACHES = {
 CELERY_BROKER_URL = f"redis://{REDIS_HOST}:6379/0"
 # URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:6379/0"
-
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = TIME_ZONE
