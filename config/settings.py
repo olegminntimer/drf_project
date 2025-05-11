@@ -21,7 +21,7 @@ else:
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["51.250.47.183","*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
