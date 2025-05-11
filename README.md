@@ -28,32 +28,6 @@ git clone https://github.com/olegminntimer/drf_project.git
 ```commandline
 docker-compose up --build --force-recreate -d
 ```
-Использование отдельного сервиса для инициализации (рекомендуется)
-
-yaml
-version: '3.8'
-
-services:
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
-    ports:
-      - "8000:8000"
-    depends_on:
-      - init
-
-  init:
-    build: .
-    command: >
-      sh -c "python manage.py migrate &&
-      python manage.py createsuperuser --noinput --email admin@example.com --username admin"
-    environment:
-      - DJANGO_SUPERUSER_PASSWORD=adminpassword
-    volumes:
-      - .:/code
-После первого запуска сервис init завершит работу, а основной сервис web продолжит работать.
 
 2. Регистрация: http://localhost:8000/users/register/ и создайте учетную запись пользователя.
 3. Вход: http://localhost:8000/users/login/ и создайте учетную запись пользователя.
