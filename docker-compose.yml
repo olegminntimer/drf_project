@@ -12,11 +12,22 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      db:
-        condition: service_healthy
-
+      - init
     env_file:
       - ./.env
+
+  init:
+    image: remusengo/drf_project
+    command: >
+      sh -c "python manage.py migrate &&
+      python manage.py createsuperuser --noinput --email admin@example.com --username admin"
+    environment:
+      - DJANGO_SUPERUSER_PASSWORD=adminpassword
+    volumes:
+      - .:/code
+    depends_on:
+      db:
+        condition: service_healthy
 
   nginx:
     image: remusengo/nginx
