@@ -14,20 +14,14 @@ SERVER_TYPE = os.environ.get("SERVER_TYPE", "")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECRET_KEY = os.getenv("SECRET_KEY")
+if "test" in sys.argv:
+    SECRET_KEY = "secret-key-test"
+else:
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-SECRET_KEY = "secret-key-test"
-# if not SECRET_KEY and not DEBUG:
-#     raise ValueError("SECRET_KEY must be set in production")
-
 ALLOWED_HOSTS = ["*"]
-# ALLOWED_HOSTS = (
-#     os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
-# )
-# if DEBUG:
-#     ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -105,7 +99,7 @@ else:
             "USER": os.getenv("POSTGRES_USER"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
             "HOST": os.getenv(host_db),
-            "PORT": os.getenv("POSTGRES_PORT"),
+            "PORT": "5432",
         }
     }
 
@@ -155,31 +149,17 @@ SIMPLE_JWT = {
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 
-REDIS_HOST = "redis" if os.getenv("DOCKER_ENV") == "true" else "127.0.0.1"
+REDIS_HOST = "redis" if os.getenv("DOCKER_ENV") == "True" else "127.0.0.1"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": f"redis://{REDIS_HOST}:6379/1",
     }
 }
-
+# URL-адрес брокера сообщений
 CELERY_BROKER_URL = f"redis://{REDIS_HOST}:6379/0"
+# URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:6379/0"
-
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#         "LOCATION": "redis://redis:6379/1",
-#     }
-# }
-#
-# # Настройки для Celery
-#
-# # URL-адрес брокера сообщений
-# CELERY_BROKER_URL = "redis://redis:6379/0"  # Например, Redis, который по умолчанию работает на порту 6379
-#
-# # URL-адрес брокера результатов, также Redis
-# CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = TIME_ZONE
@@ -215,4 +195,4 @@ if EMAIL_USE_TLS and EMAIL_USE_SSL:
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-CSRF_TRUSTED_ORIGINS = ["https://localhost", "http://localhost", "http://158.160.159.138", "https://158.160.159.138"]
+CSRF_TRUSTED_ORIGINS = ["https://localhost", "http://localhost", "http://51.250.47.183", "https://51.250.47.183"]
